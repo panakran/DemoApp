@@ -4,7 +4,7 @@
     /**
      * Bootstap module
      */
-    angular.module('Bootstrap', ['common.services']).
+    angular.module('Bootstrap', ['common.services', '720kb.datepicker']).
             directive('budgetApp', budgetApp).
             controller('BootstrapController', BootstrapController);
 
@@ -56,12 +56,30 @@
     /**
      * Controller function
      */
-    BootstrapController.$inject = ['$scope', 'fetchConst'];
-    function BootstrapController($scope, fetchConst) {
+    BootstrapController.$inject = ['$scope', 'fetchConst', '$timeout'];
+    function BootstrapController($scope, fetchConst, $timeout) {
         var vm = this;
         vm.AddItem = AddItem;
         vm.RemoveItem = RemoveItem;
         vm.ViewModel = fetchConst;
+        vm.inputFocus = inputFocus;
+
+        /**
+         * focuses on selected input 
+         * we need to do this in order to trigger .focus on input
+         * Angular issue ng-focus only triggers the focus event and doent actually apply .focus on element
+         * @param {type} event
+         * @return {undefined}
+         */
+        function inputFocus(event) {
+            console.log("event", event.target.nextElementSibling);
+            $timeout(function () {
+                // use a timout to foucus outside this digest cycle!
+                //FIXME: which one is better siblings or next
+                $(event.target).siblings('input').focus(); //use focus function instead of autofocus attribute to avoid cross browser problem. And autofocus should only be used to mark an element to be focused when page loads.
+            }, 0);
+
+        }
 
         /**
          * Add items function

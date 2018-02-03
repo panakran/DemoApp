@@ -3,9 +3,17 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="./node_modules/angularjs-datepicker/dist/angular-datepicker.css">
         <!--vendors-->
         <script type="text/javascript" src="./node_modules/angular/angular.js"></script>
         <script type="text/javascript" src="./node_modules/lodash/lodash.js"></script>
+        <script type="text/javascript" src="./node_modules/angular-translate/dist/angular-translate.js"></script>
+        <script type="text/javascript" src="./node_modules/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+        <script type="text/javascript" src="./node_modules/angular-animate/angular-animate.js"></script>
+        <script type="text/javascript" src="./node_modules/angularjs-datepicker/dist/angular-datepicker.js"></script>
+        <script type="text/javascript" src="./node_modules/jquery/dist/jquery.js"></script>
 
         <!--custom scripts-->
         <script type="text/javascript" src="./js/bootstrap/bootstrap.module.js"></script>
@@ -13,7 +21,9 @@
 
     </head>
     <body ng-app="Bootstrap">
-        <budget-app>
-        </budget-app>
+        <div class="container">
+            <budget-app>
+            </budget-app>
+        </div>
     </body>
 </html>

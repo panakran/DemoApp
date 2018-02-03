@@ -1,4 +1,11 @@
 <h1>Budget app</h1>
+<datepicker>
+    <input ng-model="bootstrapController.dateIn" type="text"/>
+</datepicker>
+<datepicker>
+    <input ng-model="bootstrapController.dateOut" type="text"/>
+</datepicker>
+
 <div ng-repeat="tableItem in bootstrapController.ViewModel">
     <h2>
         {{tableItem.header}}
@@ -7,13 +14,23 @@
         <tr>
             <th>Item</th>
             <th>Amount</th>
+            <th>Remove/add</th>
         </tr>
         <tr ng-repeat="income in tableItem.items track by $index">
-            <td>
-                <input type="text" ng-model="income.item">
+            <td  style="width: 180px;" ng-init="editModeItem = false">
+                <span ng-show="!editModeItem" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
+                    {{income.item}}
+                </span>
+                <input type="text" ng-blur="editModeItem = false" ng-show="editModeItem" type="text" ng-model="income.item">
             </td>
-            <td> 
-                <input type="text" ng-model="income.amount">
+            <td style="width: 180px;">
+                <span ng-show="!editModeAmount" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
+                    {{income.amount}}
+                </span>
+                <input type="number" ng-blur="editModeAmount = false" ng-show="editModeAmount" ng-model="income.amount">
+
+            </td>
+            <td>
                 <button ng-click="bootstrapController.RemoveItem($index, tableItem.items)">-
                 </button>
                 <button ng-show="$first" ng-click="bootstrapController.AddItem(tableItem.items)">+
@@ -22,73 +39,3 @@
         </tr>
     </table>
 </div>
-
-
-
-
-<!--THIS IS WE CASE WE NEED SEPARATE TABLES-->
-
-<!--h2>Monthly income</h2>
-<table>
-    <tr>
-        <th>Item</th>
-        <th>Amount</th>
-    </tr>
-    <tr ng-repeat="income in bootstrapController.incomeConst track by $index">
-        <td>
-            <input type="text" ng-model="income.item">
-        </td>
-        <td> 
-            <input type="text" ng-model="income.amount">
-            <button ng-click="bootstrapController.RemoveItem($index, bootstrapController.incomeConst)">-
-            </button>
-            <button ng-show="$last" ng-click="bootstrapController.AddItem(bootstrapController.incomeConst)">+
-            </button>
-        </td>
-    </tr>
-</table>
-
-
-<h2>Monthly expenses
-</h2>
-<table>
-    <tr>
-        <th>Item</th>
-        <th>Amount</th>
-    </tr>
-    <tr ng-repeat="expense in bootstrapController.expensesConst">
-        <td>{{expense.item}}</td>
-        <td> 
-            <input type="text" ng-model="expense.amount">
-        </td>
-    </tr>
-</table>
-<h2>Extra monthly expenses
-</h2>
-<table>
-    <tr>
-        <th>Item</th>
-        <th>Amount</th>
-    </tr>
-    <tr ng-repeat="extra in bootstrapController.extraConst">
-        <td>{{extra.item}}</td>
-        <td> 
-            <input type="text" ng-model="extra.amount">
-        </td>
-    </tr>
-</table>
-<h2>Home
-</h2>
-<table>
-    <tr>
-        <th>Item</th>
-        <th>Amount</th>
-    </tr>
-    <tr ng-repeat="home in bootstrapController.homeConst">
-        <td>{{home.item}}</td>
-        <td> 
-            <span> {{home.amount}}
-            </span>
-        </td>
-    </tr>
-</table-->

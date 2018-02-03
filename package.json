@@ -6,17 +6,27 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/panakran/BudgetApp.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panakran/BudgetApp.git"
   },
   "author": "panakran",
   "license": "MIT",
   "dependencies": {
     "angular": "^1.6.9",
+    "angular-animate": "^1.6.6",
+    "angular-translate": "^2.16.0",
+    "angular-translate-loader-static-files": "^2.16.0",
+    "angular-translate-loader-url": "^2.16.0",
+    "angularjs-datepicker": "^2.1.23",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.3.1",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "webpack": "^3.10.0"
   }
 }
