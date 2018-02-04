@@ -77,7 +77,6 @@
         var vm = this;
         ////////////////////
         vm.labels = ["Monthly income", "Monthly expenses", "Balance", "Per day"];
-        vm.series = ['Series A'];
 
         vm.onClick = function (points, evt) {
             console.log(points, evt);
@@ -86,7 +85,7 @@
         //
         ////////////////////
         vm.labelsPercentage = ["", ""];
-        vm.seriesPercentage = ['Series A'];
+        vm.seriesPercentage = ['Percentage'];
 
         vm.onClickPercentage = function (points, evt) {
             console.log(points, evt);
