@@ -13,21 +13,21 @@
             {
                 items: [
                     {item: "Cash", amount: 0},
-                    {item: "Payroll", amount: 0},
-                    {item: "Saving", amount: 0}
+                    {item: "Payroll", amount: 700},
+                    {item: "Saving", amount: 400}
                 ],
                 header: "Monthly income"
             },
             {
                 items: [
-                    {item: "Fuel", amount: 0},
-                    {item: "Gas", amount: 0},
-                    {item: "Rent", amount: 0},
-                    {item: "Mobile phone", amount: 0},
-                    {item: "Electricity", amount: 0},
-                    {item: "Phone", amount: 0},
-                    {item: "Common", amount: 0},
-                    {item: "Water", amount: 0}
+                    {item: "Fuel", amount: 80},
+                    {item: "Gas", amount: 30},
+                    {item: "Rent", amount: 150},
+                    {item: "Mobile phone", amount: 5},
+                    {item: "Electricity", amount: 30},
+                    {item: "Phone", amount: 13},
+                    {item: "Common", amount: 10},
+                    {item: "Water", amount: 10}
                 ],
                 header: "Monthly expenses"
             },
@@ -42,8 +42,8 @@
             },
             {
                 items: [
-                    {item: "Savings", amount: 0},
-                    {item: "Savings b/f", amount: 0}
+                    {item: "Savings", amount: 100},
+                    {item: "Savings b/f", amount: 300}
                 ],
                 header: "Home"
             }

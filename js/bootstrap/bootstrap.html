@@ -1,41 +1,82 @@
-<h1>Budget app</h1>
+<h1>Demo app</h1>
 <datepicker>
-    <input ng-model="bootstrapController.dateIn" type="text"/>
+    <input ng-model="bootstrapController.dateIn" type="text" ng-change="bootstrapController.calculateExpenses()"/>
 </datepicker>
 <datepicker>
-    <input ng-model="bootstrapController.dateOut" type="text"/>
+    <input ng-model="bootstrapController.dateOut" type="text" ng-change="bootstrapController.calculateExpenses()"/>
 </datepicker>
+<div class="row">
+    <div class="col-lg-3" ng-repeat="tableItem in bootstrapController.ViewModel">
+        <h2>
+            {{tableItem.header}}
+        </h2>
+        <table  class="table table-bordered table-hover">
+            <tr>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Remove/add</th>
+            </tr>
+            <tr ng-repeat="income in tableItem.items track by $index">
+                <td style="width: 120px;" ng-init="editModeItem = false" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
+                    <span ng-show="!editModeItem" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
+                        {{income.item}}
+                    </span>
+                    <input type="text" ng-blur="editModeItem = false" ng-show="editModeItem" ng-model="income.item" ng-value="income.item?income.item:' '">
+                </td>
+                <td style="width: 120px;" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
+                    <span ng-show="!editModeAmount" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
+                        {{income.amount?income.amount:0}}
+                    </span>
+                    <input type="number" ng-blur="editModeAmount = false" ng-show="editModeAmount" ng-model="income.amount" ng-change="bootstrapController.calculateExpenses()">
 
-<div ng-repeat="tableItem in bootstrapController.ViewModel">
-    <h2>
-        {{tableItem.header}}
-    </h2>
-    <table>
-        <tr>
-            <th>Item</th>
-            <th>Amount</th>
-            <th>Remove/add</th>
-        </tr>
-        <tr ng-repeat="income in tableItem.items track by $index">
-            <td  style="width: 180px;" ng-init="editModeItem = false">
-                <span ng-show="!editModeItem" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
-                    {{income.item}}
-                </span>
-                <input type="text" ng-blur="editModeItem = false" ng-show="editModeItem" type="text" ng-model="income.item">
-            </td>
-            <td style="width: 180px;">
-                <span ng-show="!editModeAmount" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
-                    {{income.amount}}
-                </span>
-                <input type="number" ng-blur="editModeAmount = false" ng-show="editModeAmount" ng-model="income.amount">
-
-            </td>
-            <td>
-                <button ng-click="bootstrapController.RemoveItem($index, tableItem.items)">-
-                </button>
-                <button ng-show="$first" ng-click="bootstrapController.AddItem(tableItem.items)">+
-                </button>
-            </td>
-        </tr>
-    </table>
+                </td>
+                <td>
+                    <button ng-click="bootstrapController.RemoveItem($index, tableItem.items);bootstrapController.calculateExpenses()">-
+                    </button>
+                    <button ng-show="$first" ng-click="bootstrapController.AddItem(tableItem.items)">+
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <h2>Summary
+        </h2>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>Totaly monthly income
+                </th>
+                <th>Totaly monthly expenses
+                </th>
+                <th>Balance
+                </th>
+                <th>Per day
+                </th>
+            </tr>
+            <tr>
+                <td>{{bootstrapController.monthlyIncome| currency:"€ "}}
+                </td>
+                <td>{{bootstrapController.monthlyExpenses| currency:"€ "}}
+                </td>
+                <td>{{bootstrapController.balance| currency:"€ "}}
+                </td>
+                <td>{{bootstrapController.perDay| currency:"€ "}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-lg-3">
+        <h2>Summary
+        </h2>
+        <canvas class="chart chart-pie" chart-data="bootstrapController.data" chart-labels="bootstrapController.labels" 
+                chart-series="bootstrapController.series" chart-click="bootstrapController.onClick"></canvas> 
+    </div>
+    <div class="col-lg-3">
+        <h2>Percentage of income spent
+        </h2>
+        <canvas class="chart chart-horizontal-bar" chart-data="bootstrapController.dataPercentage" chart-labels="bootstrapController.labelsPercentage" 
+                chart-series="bootstrapController.seriesPercentage" chart-click="bootstrapController.onClickPercentage"></canvas> 
+    </div>
 </div>
