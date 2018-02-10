@@ -1,10 +1,4 @@
 <h1>Demo app</h1>
-<datepicker>
-    <input ng-model="bootstrapController.dateIn" type="text" ng-change="bootstrapController.calculateExpenses()"/>
-</datepicker>
-<datepicker>
-    <input ng-model="bootstrapController.dateOut" type="text" ng-change="bootstrapController.calculateExpenses()"/>
-</datepicker>
 
 <div class="row">
     <div class="col-lg-3" ng-repeat="tableItem in bootstrapController.ViewModel track by $index">
@@ -20,14 +14,14 @@
                 </tr>
             </thead>
             <tbody class="bg-info">
-            <tr ng-repeat="income in tableItem.items track by $index">
+                <tr ng-repeat="income in tableItem.items track by $index"   style="background-color: rgb(91,{{192-4*$index}},{{222+4*$index}});">
                 <td style="width: 120px;" ng-init="editModeItem = false" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
                     <span ng-show="!editModeItem" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
                         {{income.item}}
                     </span>
                     <input class="form-control" type="text" ng-blur="editModeItem = false" ng-show="editModeItem" ng-model="income.item" ng-value="income.item?income.item:' '">
                 </td>
-                <td style="width: 120px;" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
+                <td  style="width: 120px;" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
                     <span ng-show="!editModeAmount" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
                         {{income.amount?income.amount:0}}
                     </span>
@@ -49,7 +43,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-4">
         <h2>Summary
         </h2>
         <table class="table table-bordered table-hover bg-info">
@@ -80,7 +74,7 @@
     <div class="col-lg-3">
         <h2>Summary
         </h2>
-        <canvas class="chart chart-pie" chart-data="bootstrapController.data" chart-labels="bootstrapController.labels" 
+        <canvas class="chart chart-bar" chart-data="bootstrapController.data" chart-labels="bootstrapController.labels" 
                 chart-series="bootstrapController.series" chart-click="bootstrapController.onClick"></canvas> 
     </div>
     <div class="col-lg-3">

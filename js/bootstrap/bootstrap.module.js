@@ -4,7 +4,7 @@
     /**
      * Bootstap module
      */
-    angular.module('Bootstrap', ['common.services', '720kb.datepicker', 'chart.js']).
+    angular.module('Bootstrap', ['common.services', 'chart.js','ngAnimate', 'ngSanitize', 'ui.bootstrap']).
             config(chartConfig).
             directive('budgetApp', budgetApp).
             controller('BootstrapController', BootstrapController);
@@ -17,7 +17,7 @@
     function chartConfig(ChartJsProvider) {
         // Configure all charts
         ChartJsProvider.setOptions({
-            chartColors: ['#FF5252', '#FF8A80'],
+            chartColors: ['#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
             responsive: false
         });
         // Configure all line charts
@@ -95,14 +95,16 @@
         vm.RemoveItem = RemoveItem;
         vm.ViewModel = fetchConst;
         vm.inputFocus = inputFocus;
+        vm.calculateExpenses = calculateExpenses;
         vm.monthlyIncome = 0;
         vm.monthlyExpenses = 0;
         vm.balance = 0;
         vm.perDay = 0;
         vm.percentage = 0;
-        vm.calculateExpenses = calculateExpenses;
+        vm.fadeColor = [];
 
         vm.calculateExpenses();
+
 
         function calculateExpenses() {
             var income = 0;
