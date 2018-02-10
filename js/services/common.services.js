@@ -3,7 +3,42 @@
 
     angular.module('common.services', []).
             factory('lodash', lodash).
-            factory('fetchConst', fetchConst);
+            factory('fetchConst', fetchConst).
+            factory('calculateDiffDays', calculateDiffDays).
+            factory('removeItem', removeItem).
+            factory('totalSum', totalSum);
+
+
+    function totalSum() {
+        return function (arrayOfElements) {
+
+            var sum = 0;
+            arrayOfElements.items.forEach(function (val) {
+                sum = sum + val.amount;
+            });
+            return sum;
+        };
+    }
+    function removeItem() {
+        return function (index, tableModel) {
+            if (tableModel.length === 1) {
+                return;
+            } else {
+                tableModel.splice(index, 1);
+            }
+        };
+    }
+
+    function calculateDiffDays() {
+        return function (inDate, outDate) {
+            //calculations of diff days found here
+            //https://stackoverflow.com/questions/3224834/get-difference-between-2-dates-in-javascript
+            var timeDiff = Math.abs(inDate.getTime() - outDate.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            return diffDays;
+        };
+    }
 
     function lodash() {
         return _;

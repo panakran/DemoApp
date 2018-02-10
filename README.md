@@ -4,27 +4,27 @@
 
 ### Installation guide
 
-> install [nodejs](https://nodejs.org/en/)
+install [nodejs](https://nodejs.org/en/)
 
-> clone repository
+clone repository :
 
 ```cmd
 git clone https://github.com/panakran/DemoApp.git
 ```
 
-> navigate to folder
+navigate to folder :
 
 ```cmd
 cd DemoApp
 ```
 
-> install app
+install app :
 
 ```cmd
 npm install
 ```
 
-> run dev-server with browser sync
+run dev-server with browser sync :
 
 ```cmd
 npm start
@@ -34,7 +34,6 @@ npm start
 
 + Dependencies
     - angular `1.6.9`
-    - angular-chart `1.1.1`
     - angular-ui-bootstrap `2.5.6`
     - angular-animate `1.6.6`
     - angular-sanitize `1.6.9`
@@ -50,11 +49,15 @@ npm start
     - babel-core `6.26.0`
     - babel-loader `7.1.2`
     - babel-preset-env `1.6.1`
+    - ngstorage `0.3.11`
 
 ### Updates
 
+---
+
 - [x] Add charts
-- [x] Calculate expenses across tabs
+- [x] Add save/load (local storage)
+- [ ] Calculate expenses across tabs
 - [ ] Add tabs per month
 - [ ] Add css
 - [ ] i18n
@@ -62,3 +65,4 @@ npm start
 - [ ] Unit tests
 - [ ] e2e tests
 - [ ] Compatibility with all browsers
+- [ ] Wrap app with electron

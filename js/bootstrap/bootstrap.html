@@ -1,86 +1,48 @@
-<h1>Demo app</h1>
-
+<h1>Monthly expenses app</h1>
 <div class="row">
-    <div class="col-lg-3" ng-repeat="tableItem in bootstrapController.ViewModel track by $index">
-        <h2>
-            {{tableItem.header}}
-        </h2>
-        <table  class="table table-hover ">
-            <thead>
-                <tr class="bg-primary">
-                    <th class="col-lg-5">Item</th>
-                    <th class="col-lg-5">Amount</th>
-                    <th class="col-lg-2">Remove/add</th>
-                </tr>
-            </thead>
-            <tbody class="bg-info">
-                <tr ng-repeat="income in tableItem.items track by $index"   style="background-color: rgb(91,{{192-4*$index}},{{222+4*$index}});">
-                <td style="width: 120px;" ng-init="editModeItem = false" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
-                    <span ng-show="!editModeItem" ng-click="bootstrapController.inputFocus($event);editModeItem = true;">
-                        {{income.item}}
-                    </span>
-                    <input class="form-control" type="text" ng-blur="editModeItem = false" ng-show="editModeItem" ng-model="income.item" ng-value="income.item?income.item:' '">
-                </td>
-                <td  style="width: 120px;" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
-                    <span ng-show="!editModeAmount" ng-click="bootstrapController.inputFocus($event);editModeAmount = true;">
-                        {{income.amount?income.amount:0}}
-                    </span>
-                    <input class="form-control" type="number" ng-blur="editModeAmount = false" ng-show="editModeAmount" ng-model="income.amount" ng-change="bootstrapController.calculateExpenses()">
-
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger" ng-click="bootstrapController.RemoveItem($index, tableItem.items);bootstrapController.calculateExpenses()">
-                        <span class="glyphicon glyphicon-minus"></span>
-                    </button>
-                    <button type="button" class="btn btn-success" ng-show="$first" ng-click="bootstrapController.AddItem(tableItem.items)">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        
+    <div class="col-lg-2">
+        <datepicker-element datepickerdata="vmController.dateIn" placehold="'From'">
+        </datepicker-element>
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-4">
-        <h2>Summary
-        </h2>
-        <table class="table table-bordered table-hover bg-info">
-            <thead>
-                <tr class="bg-primary">
-                    <th>Totaly monthly income
-                    </th>
-                    <th>Totaly monthly expenses
-                    </th>
-                    <th>Balance
-                    </th>
-                    <th>Per day
-                    </th>
-                </tr>
-            </thead>
-            <tr>
-                <td>{{bootstrapController.monthlyIncome| currency:"€ "}}
-                </td>
-                <td>{{bootstrapController.monthlyExpenses| currency:"€ "}}
-                </td>
-                <td>{{bootstrapController.balance| currency:"€ "}}
-                </td>
-                <td>{{bootstrapController.perDay| currency:"€ "}}
-                </td>
-            </tr>
-        </table>
+    <div class="col-lg-2">
+        <datepicker-element datepickerdata="vmController.dateOut" placehold="'To'">
+        </datepicker-element>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3" ng-repeat="tableItem in vmController.ViewModel track by $index">
+        <table-element tabledata="tableItem">
+        </table-element>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-5">
+        <results-table-element 
+            monthlyincome="vmController.monthlyIncome"
+            monthlyexpenses="vmController.monthlyExpenses"
+            balance="vmController.balance"
+            perday="vmController.perDay">
+        </results-table-element>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-info" ng-click="vmController.saveToLocalStorage()">Save
+            </button>
+            <button type="button" class="btn btn-info" ng-click="vmController.loadFromLocalStorage()">Load
+            </button>
+        </div>
     </div>
     <div class="col-lg-3">
         <h2>Summary
         </h2>
-        <canvas class="chart chart-bar" chart-data="bootstrapController.data" chart-labels="bootstrapController.labels" 
-                chart-series="bootstrapController.series" chart-click="bootstrapController.onClick"></canvas> 
+        <canvas class="chart chart-bar" chart-data="vmController.resultsChart" chart-labels="vmController.labels" 
+                chart-series="vmController.series" chart-click="vmController.onClick"></canvas> 
     </div>
     <div class="col-lg-3">
         <h2>Percentage of income spent
         </h2>
-        <canvas class="chart chart-horizontal-bar" chart-data="bootstrapController.dataPercentage" chart-labels="bootstrapController.labelsPercentage" 
-                chart-series="bootstrapController.seriesPercentage" chart-click="bootstrapController.onClickPercentage"></canvas> 
+        <canvas class="chart chart-horizontal-bar" chart-data="vmController.resultsPercentageChart" chart-labels="vmController.labelsPercentage" 
+                chart-series="vmController.seriesPercentage" chart-click="vmController.onClickPercentage"></canvas> 
     </div>
 </div>

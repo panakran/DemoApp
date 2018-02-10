@@ -4,10 +4,20 @@
     /**
      * Bootstap module
      */
-    angular.module('Bootstrap', ['common.services', 'chart.js','ngAnimate', 'ngSanitize', 'ui.bootstrap']).
+    angular.module('Bootstrap', [
+        'common.services',
+        'chart.js',
+        'ngAnimate',
+        'ngSanitize',
+        'ui.bootstrap',
+        'tableModule',
+        'datepickerModule',
+        'resultsTableModule',
+        'ngStorage'
+    ]).
             config(chartConfig).
             directive('budgetApp', budgetApp).
-            controller('BootstrapController', BootstrapController);
+            controller('bootstrapController', bootstrapController);
 
     /**
      * char configuration method
@@ -33,8 +43,8 @@
     function budgetApp() {
         return{
             templateUrl: "js/bootstrap/bootstrap.html",
-            controller: "BootstrapController",
-            controllerAs: "bootstrapController",
+            controller: "bootstrapController",
+            controllerAs: "vmController",
             bindToController: true,
             restrict: 'E',
             scope: true,
@@ -56,145 +66,138 @@
     /**
      * prelinking function
      */
-    preLink.$inject = ['scope', 'elem', 'attr', 'ctrl'];
+    preLink.$inject = ['scope',
+        'elem',
+        'attr',
+        'ctrl'
+    ];
     function preLink(scope, elem, attr, ctrl) {
-        console.log("preLink::", scope);
     }
 
     /**
      * postlinking function
      */
-    postLink.$inject = ['scope', 'elem', 'attr', 'ctrl'];
+    postLink.$inject = [
+        'scope',
+        'elem',
+        'attr',
+        'ctrl'
+    ];
     function postLink(scope, elem, attr, ctrl) {
-        console.log("postLink::", scope);
     }
 
     /**
      * Controller function
      */
-    BootstrapController.$inject = ['$scope', 'fetchConst', '$timeout'];
-    function BootstrapController($scope, fetchConst, $timeout) {
+    bootstrapController.$inject = [
+        '$scope',
+        'fetchConst',
+        '$timeout',
+        'totalSum',
+        'calculateDiffDays',
+        '$localStorage'
+    ];
+    function bootstrapController($scope, fetchConst, $timeout, totalSum, calculateDiffDays, $localStorage) {
+
         var vm = this;
-        ////////////////////
+
         vm.labels = ["Monthly income", "Monthly expenses", "Balance", "Per day"];
 
+        console.log('STORAGE', $localStorage.model);
         vm.onClick = function (points, evt) {
             console.log(points, evt);
         };
-        /////////////////
-        //
-        ////////////////////
+        vm.$onClick = function (points, evt) {
+            console.log(points, evt);
+        };
+
         vm.labelsPercentage = ["", ""];
         vm.seriesPercentage = ['Percentage'];
 
         vm.onClickPercentage = function (points, evt) {
             console.log(points, evt);
         };
-        /////////////////
-        vm.AddItem = AddItem;
-        vm.RemoveItem = RemoveItem;
-        vm.ViewModel = fetchConst;
-        vm.inputFocus = inputFocus;
-        vm.calculateExpenses = calculateExpenses;
-        vm.monthlyIncome = 0;
-        vm.monthlyExpenses = 0;
-        vm.balance = 0;
-        vm.perDay = 0;
-        vm.percentage = 0;
-        vm.fadeColor = [];
 
+        vm.initializeModel = initializeModel;
+        vm.calculateExpenses = calculateExpenses;
+        vm.saveToLocalStorage = saveToLocalStorage;
+        vm.loadFromLocalStorage = loadFromLocalStorage;
+        vm.initializeModel();
         vm.calculateExpenses();
 
 
+        $scope.$on('calculateExpensesEvent', function (event, data) {
+            calculateExpenses();
+        });
+        
+        $scope.$watch('vmController.dateIn', function (event, data) {
+            calculateExpenses();
+        });
+        $scope.$watch('vmController.dateOut', function (event, data) {
+            calculateExpenses();
+        });
+
+        function initializeModel() {
+            vm.ViewModel = fetchConst;
+            vm.monthlyIncome = 0;
+            vm.monthlyExpenses = 0;
+            vm.balance = 0;
+            vm.perDay = 0;
+            vm.percentage = 0;
+            vm.fadeColor = [];
+            vm.dateIn = "";
+            vm.dateOut = "";
+
+        }
+
+        function saveToLocalStorage() {
+            $localStorage.ViewModel = vm.ViewModel;
+            $localStorage.monthlyIncome = vm.monthlyIncome;
+            $localStorage.monthlyExpenses = vm.monthlyExpenses;
+            $localStorage.balance = vm.balance;
+            $localStorage.percentage = vm.percentage;
+            $localStorage.resultsChart = vm.resultsChart;
+            $localStorage.resultsPercentageChart = vm.resultsPercentageChart;
+            $localStorage.dateIn = vm.dateIn;
+            $localStorage.dateOut = vm.dateOut;
+        }
+
+        function loadFromLocalStorage() {
+            vm.ViewModel = $localStorage.ViewModel;
+            vm.monthlyIncome = $localStorage.monthlyIncome;
+            vm.monthlyExpenses = $localStorage.monthlyExpenses;
+            vm.balance = $localStorage.balance;
+            vm.percentage = $localStorage.percentage;
+            vm.resultsChart = $localStorage.resultsChart;
+            vm.resultsPercentageChart = $localStorage.resultsPercentageChart;
+            vm.dateIn = $localStorage.dateIn;
+            vm.dateOut = $localStorage.dateOut;
+
+        }
+
         function calculateExpenses() {
-            var income = 0;
-            var expenses = 0;
-            var extra = 0;
-            var savings = 0;
+
             var inDate = new Date(vm.dateIn);
             var outDate = new Date(vm.dateOut);
-
-            //calculations of diff days found here
-            //https://stackoverflow.com/questions/3224834/get-difference-between-2-dates-in-javascript
-            var timeDiff = Math.abs(inDate.getTime() - outDate.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-            angular.forEach(vm.ViewModel[0].items, function (val) {
-                income = income + val.amount;
-            });
-
-            angular.forEach(vm.ViewModel[1].items, function (val) {
-                expenses = expenses + val.amount;
-            });
-
-            angular.forEach(vm.ViewModel[2].items, function (val) {
-                extra = extra + val.amount;
-            });
-            angular.forEach(vm.ViewModel[3].items, function (val) {
-                savings = savings + val.amount;
-            });
+            var income = vm.ViewModel[0];
+            var expenses = vm.ViewModel[1];
+            var extra = vm.ViewModel[2];
+            var savings = vm.ViewModel[3];
 
 
-            vm.monthlyIncome = income;
-            vm.monthlyExpenses = expenses + extra + savings;
+
+            vm.monthlyIncome = totalSum(income);
+            vm.monthlyExpenses = totalSum(expenses) + totalSum(extra) + totalSum(savings);
             vm.balance = vm.monthlyIncome - vm.monthlyExpenses;
-            vm.perDay = vm.balance / diffDays;
+            vm.perDay = vm.balance / calculateDiffDays(inDate, outDate);
             vm.percentage = (vm.balance * 100) / vm.monthlyIncome;
-            vm.data = [
+            vm.resultsChart = [
                 [vm.monthlyIncome, vm.monthlyExpenses, vm.balance, vm.perDay]
             ];
-            vm.dataPercentage = [
+            vm.resultsPercentageChart = [
                 [vm.percentage, 100]
             ];
         }
-
-
-        /**
-         * focuses on selected input 
-         * -we need to do this in order to trigger .focus on input
-         * -Angular issue ng-focus only triggers the focus event and doesnt actually apply .focus on element
-         * -use a timeout to focus outside this digest cycle!
-         * -use focus function instead of autofocus attribute to avoid cross browser problem
-         * and autofocus should only be used to mark an element to be focused when page loads.
-         * -FIXME: which one is better siblings or next
-         * @param {type} event
-         * @return {undefined}
-         */
-        function inputFocus(event) {
-            console.log("event", event.target);
-            $timeout(function () {
-                $(event.target).children('input').focus();
-                $(event.target).siblings('input').focus();
-            }, 0);
-
-        }
-
-        /**
-         * Add items function
-         * - adds a new item to the given table model
-         * @param {type} item
-         * @return {undefined}
-         */
-        function AddItem(tableModel) {
-            console.log("AddItem", tableModel);
-            tableModel.push({item: "New", amount: 0});
-        }
-
-        /**
-         * Removes an item based on his index from a table model given
-         * @param {type} index
-         * @param {type} model
-         * @return {undefined}
-         */
-        function RemoveItem(index, tableModel) {
-            console.log("RemoveItem", index, tableModel);
-            if (tableModel.length === 1) {
-                return;
-            } else {
-                tableModel.splice(index, 1);
-            }
-        }
-
         console.log("vm::", vm.ViewModel);
     }
 
