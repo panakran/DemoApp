@@ -90,18 +90,16 @@ var ang = require("angular");
     bootstrapController.$inject = [
         '$scope',
         'fetchConst',
-        '$timeout',
         'totalSum',
         'calculateDiffDays',
         '$localStorage'
     ];
-    function bootstrapController($scope, fetchConst, $timeout, totalSum, calculateDiffDays, $localStorage) {
+    function bootstrapController($scope, fetchConst, totalSum, calculateDiffDays, $localStorage) {
 
         var vm = this;
-
+console.log("scope", $scope);
         vm.labels = ["Monthly income", "Monthly expenses", "Balance", "Per day"];
 
-        console.log('STORAGE', $localStorage.model);
         vm.onClick = function (points, evt) {
             console.log(points, evt);
         };
@@ -196,7 +194,7 @@ var ang = require("angular");
                 [vm.percentage, 100]
             ];
         }
-        console.log("vm::", vm.ViewModel);
+        
     }
 
     //debug mode enable/disable

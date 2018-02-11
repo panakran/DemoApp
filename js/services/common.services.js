@@ -48,8 +48,8 @@
             {
                 items: [
                     {item: "Cash", amount: 0},
-                    {item: "Payroll", amount: 700},
-                    {item: "Saving", amount: 400}
+                    {item: "Payroll", amount: 500},
+                    {item: "Saving", amount: 500}
                 ],
                 header: "Monthly income"
             },

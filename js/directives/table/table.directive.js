@@ -34,23 +34,12 @@
     /**
      * prelinking function
      */
-    preLink.$inject = ['scope',
-        'elem',
-        'attr',
-        'ctrl'
-    ];
     function preLink(scope, elem, attr, ctrl) {
     }
 
     /**
      * postlinking function
      */
-    postLink.$inject = [
-        'scope',
-        'elem',
-        'attr',
-        'ctrl'
-    ];
     function postLink(scope, elem, attr, ctrl) {
     }
 
@@ -59,15 +48,12 @@
      */
     tableController.$inject = [
         '$scope',
-        'fetchConst',
         '$timeout',
-        'totalSum',
-        'calculateDiffDays',
         'removeItem'
     ];
-    function tableController($scope, fetchConst, $timeout, totalSum, calculateDiffDays, removeItem) {
+    function tableController($scope, $timeout, removeItem) {
         var vm = this;
-
+        
         vm.AddItem = AddItem;
         vm.RemoveItem = RemoveItem;
         vm.inputFocus = inputFocus;

@@ -34,23 +34,12 @@
     /**
      * prelinking function
      */
-    preLink.$inject = ['scope',
-        'elem',
-        'attr',
-        'ctrl'
-    ];
     function preLink(scope, elem, attr, ctrl) {
     }
 
     /**
      * postlinking function
      */
-    postLink.$inject = [
-        'scope',
-        'elem',
-        'attr',
-        'ctrl'
-    ];
     function postLink(scope, elem, attr, ctrl) {
     }
 
