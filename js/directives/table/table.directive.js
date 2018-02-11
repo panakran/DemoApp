@@ -2,12 +2,19 @@
     'use strict';
 
     angular.module('tableModule', ['common.services']).
+            run(loadTemplates).
             directive('tableElement', tableElement).
             controller('tableController', tableController);
 
-    function tableElement() {
+    loadTemplates.$inject = ['$templateCache'];
+    function loadTemplates($templateCache) {
+        $templateCache.put('table.template.html', require('./table.template.html'));
+    }
+
+    tableElement.$inject = ['$templateCache'];
+    function tableElement($templateCache) {
         return{
-            templateUrl: "js/directives/table/table.template.html",
+            template: $templateCache.get('table.template.html'),
             controller: "tableController",
             controllerAs: "vmController",
             bindToController: true,

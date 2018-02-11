@@ -1,23 +1,31 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'angular-ui-bootstrap/dist/ui-bootstrap-csp.css';
+var ang = require("angular");
 (function () {
     'use strict';
-
     /**
      * Bootstap module
      */
-    angular.module('Bootstrap', [
-        'common.services',
+    ang.module('Bootstrap', [
         'chart.js',
         'ngAnimate',
         'ngSanitize',
         'ui.bootstrap',
-        'tableModule',
         'datepickerModule',
+        'common.services',
+        'tableModule',
         'resultsTableModule',
         'ngStorage'
     ]).
+            run(loadTemplates).
             config(chartConfig).
             directive('budgetApp', budgetApp).
             controller('bootstrapController', bootstrapController);
+
+    loadTemplates.$inject = ['$templateCache'];
+    function loadTemplates($templateCache) {
+        $templateCache.put('bootstrap.html', require('./bootstrap.html'));
+    }
 
     /**
      * char configuration method
@@ -40,9 +48,10 @@
      * Directive function
      * @return {bootstrap-moduleL#1.budgetApp.bootstrap-moduleAnonym$0}
      */
-    function budgetApp() {
+    loadTemplates.$inject = ['$templateCache'];
+    function budgetApp($templateCache) {
         return{
-            templateUrl: "js/bootstrap/bootstrap.html",
+            template: $templateCache.get('bootstrap.html'),
             controller: "bootstrapController",
             controllerAs: "vmController",
             bindToController: true,
@@ -66,23 +75,12 @@
     /**
      * prelinking function
      */
-    preLink.$inject = ['scope',
-        'elem',
-        'attr',
-        'ctrl'
-    ];
     function preLink(scope, elem, attr, ctrl) {
     }
 
     /**
      * postlinking function
      */
-    postLink.$inject = [
-        'scope',
-        'elem',
-        'attr',
-        'ctrl'
-    ];
     function postLink(scope, elem, attr, ctrl) {
     }
 
@@ -129,7 +127,7 @@
         $scope.$on('calculateExpensesEvent', function (event, data) {
             calculateExpenses();
         });
-        
+
         $scope.$watch('vmController.dateIn', function (event, data) {
             calculateExpenses();
         });

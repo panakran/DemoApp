@@ -57,6 +57,7 @@ npm start
 
 - [x] Add charts
 - [x] Add save/load (local storage)
+- [x] Compatibility with all browsers
 - [ ] Calculate expenses across tabs
 - [ ] Add tabs per month
 - [ ] Add css
@@ -64,5 +65,4 @@ npm start
 - [ ] npm publish
 - [ ] Unit tests
 - [ ] e2e tests
-- [ ] Compatibility with all browsers
 - [ ] Wrap app with electron

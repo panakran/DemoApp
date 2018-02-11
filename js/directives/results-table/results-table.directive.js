@@ -2,12 +2,19 @@
     'use strict';
 
     angular.module('resultsTableModule', []).
+            run(loadTemplates).
             directive('resultsTableElement', tableElement).
             controller('resultsTableController', resultsTableController);
 
-    function tableElement() {
+    loadTemplates.$inject = ['$templateCache'];
+    function loadTemplates($templateCache) {
+        $templateCache.put('results-table.template.html', require('./results-table.template.html'));
+    }
+
+    tableElement.$inject = ['$templateCache'];
+    function tableElement($templateCache) {
         return{
-            templateUrl: "js/directives/results-table/results-table.template.html",
+            template: $templateCache.get('results-table.template.html'),
             controller: "resultsTableController",
             controllerAs: "vmController",
             bindToController: true,

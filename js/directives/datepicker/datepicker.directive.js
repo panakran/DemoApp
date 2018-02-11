@@ -1,13 +1,20 @@
 (function () {
     'use strict';
 
-    angular.module('datepickerModule', ['common.services']).
+    angular.module('datepickerModule', []).
+            run(loadTemplates).
             directive('datepickerElement', datepickerElement).
             controller('datepickerController', datepickerController);
 
-    function datepickerElement() {
+    loadTemplates.$inject = ['$templateCache'];
+    function loadTemplates($templateCache) {
+        $templateCache.put('datepicker.template.html', require('./datepicker.template.html'));
+    }
+
+    datepickerElement.$inject = ['$templateCache'];
+    function datepickerElement($templateCache) {
         return{
-            templateUrl: "js/directives/datepicker/datepicker.template.html",
+            template: $templateCache.get('datepicker.template.html'),
             controller: "datepickerController",
             controllerAs: "vmController",
             bindToController: true,
