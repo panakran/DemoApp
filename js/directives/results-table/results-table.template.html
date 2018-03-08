@@ -14,13 +14,13 @@
         </tr>
     </thead>
     <tr>
-        <td>{{vmController.monthlyincome| currency:"€ "}}
+        <td><span ng-bind="vmController.monthlyincome| currency:'€'"></span>
         </td>
-        <td>{{vmController.monthlyexpenses| currency:"€ "}}
+        <td><span ng-bind="vmController.monthlyexpenses| currency:'€'"></span>
         </td>
-        <td>{{vmController.balance| currency:"€ "}}
+        <td><span ng-bind="vmController.balance| currency:'€'"></span>
         </td>
-        <td>{{vmController.perday| currency:"€ "}}
+        <td><span ng-bind="vmController.perday| currency:'€'"></span>
         </td>
     </tr>
 </table>

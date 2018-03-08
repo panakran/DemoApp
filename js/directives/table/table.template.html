@@ -1,5 +1,5 @@
 <h2>
-    {{vmController.tabledata.header}}
+    <span ng-bind="vmController.tabledata.header"></span>
 </h2>
 <table  class="table table-hover ">
     <thead>
@@ -13,13 +13,13 @@
         <tr ng-repeat="income in vmController.tabledata.items track by $index">
             <td style="width: 120px;" ng-init="editModeItem = false" ng-click="vmController.inputFocus($event);editModeItem = true;">
                 <span ng-show="!editModeItem" ng-click="vmController.inputFocus($event);editModeItem = true;">
-                    {{income.item}}
+                    <span ng-bind="income.item"></span>
                 </span>
                 <input class="form-control" type="text" ng-blur="editModeItem = false" ng-show="editModeItem" ng-model="income.item" ng-value="income.item?income.item:' '">
             </td>
             <td  style="width: 120px;" ng-click="vmController.inputFocus($event);editModeAmount = true;">
                 <span ng-show="!editModeAmount" ng-click="vmController.inputFocus($event);editModeAmount = true;">
-                    {{income.amount?income.amount:0}}
+                    <span ng-bind="income.amount?income.amount:0"></span>
                 </span>
                 <input class="form-control" type="number" ng-blur="editModeAmount = false" ng-show="editModeAmount" ng-model="income.amount" ng-change="vmController.calculateExpensesEventTrigger()">
 
