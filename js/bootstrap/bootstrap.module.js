@@ -11,7 +11,6 @@ ang.module('Bootstrap', [
     'chart.js',
     'ngAnimate',
     'ngSanitize',
-    'ui.bootstrap',
     'datepickerModule',
     'common.services',
     'tableModule',
@@ -91,6 +90,16 @@ bootstrapController.$inject = [
 function bootstrapController($scope, fetchConst, calculate, localStorage) {
 
     let vm = this;
+    
+      vm.tabs = [
+    { title:'Dynamic Title 1', content:'Dynamic content 1' },
+    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
+  ];
+
+
+  vm.model = {
+    name: 'Tabs'
+  };
 
     vm.labels = fetchConst.labels();
     vm.labelsPercentage = fetchConst.labelsPercentage();
