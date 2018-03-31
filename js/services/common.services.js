@@ -1,49 +1,89 @@
-(function () {
-    'use strict';
-
-    angular.module('common.services', []).
-            factory('lodash', lodash).
-            factory('fetchConst', fetchConst).
-            factory('calculateDiffDays', calculateDiffDays).
-            factory('removeItem', removeItem).
-            factory('totalSum', totalSum);
+var ang = require("angular");
+ang.module('common.services', []).
+        factory('lodash', lodash).
+        factory('fetchConst', fetchConst).
+        factory('calculate', calculate).
+        factory('localStorage', localStorage);
 
 
-    function totalSum() {
-        return function (arrayOfElements) {
+localStorage.$inject = ['$localStorage'];
+function localStorage($localStorage) {
+    return {
+        saveToLocalStorage: saveToLocalStorage,
+        loadFromLocalStorage: loadFromLocalStorage
+    };
 
-            var sum = 0;
-            arrayOfElements.items.forEach(function (val) {
-                sum = sum + val.amount;
-            });
-            return sum;
-        };
+    function saveToLocalStorage(model) {
+        $localStorage.ViewModel = model.ViewModel;
+        $localStorage.monthlyIncome = model.monthlyIncome;
+        $localStorage.monthlyExpenses = model.monthlyExpenses;
+        $localStorage.balance = model.balance;
+        $localStorage.percentage = model.percentage;
+        $localStorage.resultsChart = model.resultsChart;
+        $localStorage.resultsPercentageChart = model.resultsPercentageChart;
+        $localStorage.dateIn = model.dateIn;
+        $localStorage.dateOut = model.dateOut;
     }
-    function removeItem() {
-        return function (index, tableModel) {
-            if (tableModel.length === 1) {
-                return;
-            } else {
-                tableModel.splice(index, 1);
-            }
-        };
-    }
-
-    function calculateDiffDays() {
-        return function (inDate, outDate) {
-            //calculations of diff days found here
-            //https://stackoverflow.com/questions/3224834/get-difference-between-2-dates-in-javascript
-            var timeDiff = Math.abs(inDate.getTime() - outDate.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-            return diffDays;
-        };
+    function loadFromLocalStorage(model) {
+        model.ViewModel = $localStorage.ViewModel;
+        model.monthlyIncome = $localStorage.monthlyIncome;
+        model.monthlyExpenses = $localStorage.monthlyExpenses;
+        model.balance = $localStorage.balance;
+        model.percentage = $localStorage.percentage;
+        model.resultsChart = $localStorage.resultsChart;
+        model.resultsPercentageChart = $localStorage.resultsPercentageChart;
+        model.dateIn = $localStorage.dateIn;
+        model.dateOut = $localStorage.dateOut;
     }
 
-    function lodash() {
-        return _;
+}
+
+
+function calculate() {
+    return {
+        diffDays: diffDays,
+        totalSum: totalSum
+    };
+
+    function diffDays(inDate, outDate) {
+        //calculations of diff days found here
+        //https://stackoverflow.com/questions/3224834/get-difference-between-2-dates-in-javascript
+        let timeDiff = Math.abs(inDate.getTime() - outDate.getTime());
+        let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+        return diffDays;
     }
-    function fetchConst() {
+
+    function totalSum(arrayOfElements) {
+        let sum = 0;
+        arrayOfElements.items.forEach(function (val) {
+            sum = sum + val.amount;
+        });
+        return sum;
+    }
+}
+
+function lodash() {
+    return _;
+}
+function fetchConst() {
+    return {
+        initData: initData,
+        labels: labels,
+        labelsPercentage: labelsPercentage,
+        seriesPercentage: seriesPercentage
+    };
+
+    function labels() {
+        return ["Monthly income", "Monthly expenses", "Balance", "Per day"];
+    }
+    function seriesPercentage() {
+        return ['Percentage'];
+    }
+    function labelsPercentage() {
+        return ["", ""];
+    }
+    function initData() {
         return [
             {
                 items: [
@@ -84,5 +124,4 @@
             }
         ];
     }
-
-})();
+}

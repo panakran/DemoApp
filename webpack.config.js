@@ -4,9 +4,11 @@ var path = require('path');
 var fs = require('fs');
 var gracefulFs = require('graceful-fs');
 gracefulFs.gracefulify(fs);
+const entryPath = "./entry-webpack.js";
 
 module.exports = {
     context: path.join(__dirname, ''),
+    mode: 'development',
     module: {
         rules: [
             {
@@ -29,18 +31,6 @@ module.exports = {
             {
                 test: /\.(png|woff|woff2|eot|ttf|svg)$/, //used to load bootstrap extra files used in app
                 loader: 'url-loader?limit=100000'
-            },
-            {
-//                html template loader 
-//                ex. require("./js/bootstrap/bootstrap.html"); on webpack entry
-//                function loadTemplates($templateCache) {  IN DIRECTIVE
-//                    $templateCache.put('bootstrap.html', require('./bootstrap.html'));
-//                }
-//                template: $templateCache.get('bootstrap.html')
-                test: /\.(html)$/,
-                use: {
-                    loader: 'html-loader'
-                }
             }
         ]
     },
@@ -48,13 +38,14 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery"
-        })
-        
+        }),
     ],
 
-    entry: "./entry-webpack.js",
+    entry: {
+        "bundle": entryPath
+    },
     output: {
         path: __dirname,
-        filename: "./dist/bundle.js"
+        filename: "./dist/[name].js"
     }
 };

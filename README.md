@@ -24,10 +24,22 @@ install app :
 npm install
 ```
 
-run dev-server with browser sync :
+run webpack-dev-server  :
 
 ```cmd
-npm start
+npm run start
+```
+
+production version under docs :
+
+```cmd
+npm run build
+```
+
+generate bundle under dist:
+
+```cmd
+npm run webpack
 ```
 
 ### Libraries used

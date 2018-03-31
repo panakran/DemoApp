@@ -1,8 +1,3 @@
-//vendors
-require("./js/bootstrap/bootstrap.html");
-require("./js/directives/datepicker/datepicker.template.html");
-require("./js/directives/table/table.template.html");
-require("./js/directives/results-table/results-table.template.html");
 
 require('jquery');
 require('bootstrap');
@@ -23,5 +18,7 @@ require('lodash');
 require("./js/bootstrap/bootstrap.module.js");
 require("./js/services/common.services.js");
 require("./js/directives/table/table.directive.js");
+require("./js/directives/table/table.services.js");
 require("./js/directives/datepicker/datepicker.directive.js");
+require("./js/directives/datepicker/datepicker.services.js");
 require("./js/directives/results-table/results-table.directive.js");

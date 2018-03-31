@@ -1,134 +1,79 @@
-(function () {
-    'use strict';
+let template = require('raw-loader!./datepicker.template.html');
+var ang = require("angular");
+ang.module('datepickerModule', []).
+        directive('datepickerElement', datepickerElement).
+        controller('datepickerController', datepickerController);
 
-    angular.module('datepickerModule', []).
-            run(loadTemplates).
-            directive('datepickerElement', datepickerElement).
-            controller('datepickerController', datepickerController);
+function datepickerElement() {
+    return{
+        template: template,
+        controller: "datepickerController",
+        controllerAs: "vmController",
+        bindToController: true,
+        restrict: 'E',
+        scope: {datepickerdata: '=', placehold: '='},
+        link: linkFunction()
+    };
+}
 
-    loadTemplates.$inject = ['$templateCache'];
-    function loadTemplates($templateCache) {
-        $templateCache.put('datepicker.template.html', require('./datepicker.template.html'));
-    }
+function linkFunction() {
+    return{
+        pre: preLink,
+        post: postLink
+    };
+}
 
-    datepickerElement.$inject = ['$templateCache'];
-    function datepickerElement($templateCache) {
-        return{
-            template: $templateCache.get('datepicker.template.html'),
-            controller: "datepickerController",
-            controllerAs: "vmController",
-            bindToController: true,
-            restrict: 'E',
-            scope: {datepickerdata: '=', placehold: '='},
-            link: linkFunction()
-        };
-    }
+/**
+ * prelinking function
+ */
+function preLink(scope, elem, attr, ctrl) {
+}
 
-    function linkFunction() {
-        return{
-            pre: preLink,
-            post: postLink
-        };
-    }
+/**
+ * postlinking function
+ */
+function postLink(scope, elem, attr, ctrl) {
+}
+
+/**
+ * Controller function
+ */
+datepickerController.$inject = ['datePicker'];
+function datepickerController(datePicker) {
+    let vm = this;
 
     /**
-     * prelinking function
+     * Ctrl variables
      */
-    function preLink(scope, elem, attr, ctrl) {
-    }
+    vm.popup = datePicker.popup();
+    vm.inlineOptions = datePicker.inlineOptions();
+    vm.dateOptions = datePicker.dateOptions();
+    vm.format = 'dd-MM-yyyy';
+
 
     /**
-     * postlinking function
+     * Ctrl function
      */
-    function postLink(scope, elem, attr, ctrl) {
+    vm.toggleMin = toggleMin;
+    vm.openDatepicker = openDatepicker;
+    vm.setDate = setDate;
+
+    initializeDatepicker();
+    vm.toggleMin();
+
+    function toggleMin() {
+        datePicker.toggleMin(vm.inlineOptions, vm.dateOptions);
     }
 
-    /**
-     * Controller function
-     */
-    datepickerController.$inject = ['$scope'];
-    function datepickerController($scope) {
-        var vm = this;
-
-        vm.popup = {
-            opened: false
-        };
-        vm.inlineOptions = {
-            customClass: getDayClass,
-            minDate: new Date(),
-            showWeeks: true
-        };
-
-        vm.dateOptions = {
-            formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
-            minDate: new Date(),
-            startingDay: 1
-        };
-        vm.format = 'dd-MM-yyyy';
-
-
-
-        vm.toggleMin = toggleMin;
-        vm.openDatepicker = openDatepicker;
-        vm.setDate = setDate;
-
-        initializeDatepicker();
-        vm.toggleMin();
-
-        function toggleMin() {
-            vm.inlineOptions.minDate = vm.inlineOptions.minDate ? null : new Date();
-            vm.dateOptions.minDate = vm.inlineOptions.minDate;
-        }
-
-
-
-        function openDatepicker() {
-            vm.popup.opened = true;
-        }
-
-
-        function setDate(year, month, day) {
-            vm.datepickerdata = new Date(year, month, day);
-        }
-
-
-
-        function initializeDatepicker() {
-
-            var tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            var afterTomorrow = new Date();
-            afterTomorrow.setDate(tomorrow.getDate() + 1);
-            vm.events = [
-                {
-                    date: tomorrow,
-                    status: 'full'
-                },
-                {
-                    date: afterTomorrow,
-                    status: 'partially'
-                }
-            ];
-        }
-
-        function getDayClass(data) {
-            var date = data.date,
-                    mode = data.mode;
-            if (mode === 'day') {
-                var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
-
-                for (var i = 0; i < vm.events.length; i++) {
-                    var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
-
-                    if (dayToCheck === currentDay) {
-                        return vm.events[i].status;
-                    }
-                }
-            }
-
-            return '';
-        }
+    function openDatepicker() {
+        vm.popup.opened = true;
     }
 
-})();
+    function setDate(year, month, day) {
+        vm.datepickerdata = datePicker.setDate(year, month, day);
+    }
+
+    function initializeDatepicker() {
+        vm.events = datePicker.initializeEvents();
+    }
+}
