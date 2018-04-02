@@ -90,62 +90,16 @@ bootstrapController.$inject = [
 function bootstrapController($scope, fetchConst, calculate, localStorage) {
 
     let vm = this;
-    
-      vm.tabs = [
-    { title:'Dynamic Title 1', content:'Dynamic content 1' },
-    { title:'Dynamic Title 2', content:'Dynamic content 2', disabled: true }
-  ];
-
-
-  vm.model = {
-    name: 'Tabs'
-  };
-
-    vm.labels = fetchConst.labels();
-    vm.labelsPercentage = fetchConst.labelsPercentage();
-    vm.seriesPercentage = fetchConst.seriesPercentage();
-
-    vm.initializeModel = initializeModel;
-    vm.calculateExpenses = calculateExpenses;
-    vm.saveToLocalStorage = saveToLocalStorage;
-    vm.loadFromLocalStorage = loadFromLocalStorage;
-    vm.onClick = onClick;
-    vm.$onClick = $onClick;
-    vm.onClickPercentage = onClickPercentage;
-    vm.initializeModel();
-    vm.calculateExpenses();
-
-    $scope.$on('calculateExpensesEvent', eventCalculateExpensesEvent);
-    $scope.$watch('vmController.dateIn', watcherDateIn);
-    $scope.$watch('vmController.dateOut', watcherDateOut);
-
-
-    function onClick(points, evt) {
-        console.log(points, evt);
-    }
-    function $onClick(points, evt) {
-        console.log(points, evt);
-    }
-
-    function onClickPercentage(points, evt) {
-        console.log(points, evt);
-    }
-
-
-
-
-    function eventCalculateExpensesEvent(event, data) {
-        calculateExpenses();
-    }
-
-    function watcherDateIn(event, data) {
-        calculateExpenses();
-    }
-    function watcherDateOut(event, data) {
-        calculateExpenses();
-    }
-
-    function initializeModel() {
+    let eventCalculateExpensesEvent = (event, data) => vm.calculateExpenses();
+    let watcherDateIn = (event, data) => vm.calculateExpenses();
+    let watcherDateOut = (event, data) => vm.calculateExpenses();
+    vm.onClick = (points, evt) => console.log(points, evt);
+    vm.$onClick = (points, evt) => console.log(points, evt);
+    vm.onClickPercentage = (points, evt) => console.log(points, evt);
+    vm.saveToLocalStorage = () => localStorage.saveToLocalStorage(vm);
+    vm.calculateExpenses = () => calculate.expenses(vm);
+    vm.loadFromLocalStorage = () => localStorage.loadFromLocalStorage(vm);
+    vm.initializeModel = () => {
         vm.ViewModel = fetchConst.initData();
         vm.monthlyIncome = 0;
         vm.monthlyExpenses = 0;
@@ -155,45 +109,33 @@ function bootstrapController($scope, fetchConst, calculate, localStorage) {
         vm.fadeColor = [];
         vm.dateIn = "";
         vm.dateOut = "";
+    };
 
-    }
+    vm.tabs = [
+        {title: 'Dynamic Title 1', content: 'Dynamic content 1'},
+        {title: 'Dynamic Title 2', content: 'Dynamic content 2', disabled: true}
+    ];
 
-    function saveToLocalStorage() {
-        localStorage.saveToLocalStorage(vm);
-    }
+    vm.model = {
+        name: 'Tabs'
+    };
 
-    function loadFromLocalStorage() {
-        localStorage.loadFromLocalStorage(vm);
-    }
+    vm.labels = fetchConst.labels();
+    vm.labelsPercentage = fetchConst.labelsPercentage();
+    vm.seriesPercentage = fetchConst.seriesPercentage();
 
-    function calculateExpenses() {
+    $scope.$on('calculateExpensesEvent', eventCalculateExpensesEvent);
+    $scope.$watch('vmController.dateIn', watcherDateIn);
+    $scope.$watch('vmController.dateOut', watcherDateOut);
 
-        let inDate = new Date(vm.dateIn);
-        let outDate = new Date(vm.dateOut);
-        let income = vm.ViewModel[0];
-        let expenses = vm.ViewModel[1];
-        let extra = vm.ViewModel[2];
-        let savings = vm.ViewModel[3];
-
-
-
-        vm.monthlyIncome = calculate.totalSum(income);
-        vm.monthlyExpenses = calculate.totalSum(expenses) + calculate.totalSum(extra) + calculate.totalSum(savings);
-        vm.balance = vm.monthlyIncome - vm.monthlyExpenses;
-        vm.perDay = vm.balance / calculate.diffDays(inDate, outDate);
-        vm.percentage = (vm.balance * 100) / vm.monthlyIncome;
-        vm.resultsChart = [
-            [vm.monthlyIncome, vm.monthlyExpenses, vm.balance, vm.perDay]
-        ];
-        vm.resultsPercentageChart = [
-            [vm.percentage, 100]
-        ];
-    }
+    vm.initializeModel();
+    vm.calculateExpenses();
 
 }
 
 //debug mode enable/disable
 let DEBUG = true;
 if (!DEBUG) {
-    console.log = function () {};
+    console.log = () => {
+    };
 }

@@ -41,8 +41,7 @@ function localStorage($localStorage) {
 
 function calculate() {
     return {
-        diffDays: diffDays,
-        totalSum: totalSum
+        expenses: expenses
     };
 
     function diffDays(inDate, outDate) {
@@ -56,10 +55,30 @@ function calculate() {
 
     function totalSum(arrayOfElements) {
         let sum = 0;
-        arrayOfElements.items.forEach(function (val) {
-            sum = sum + val.amount;
-        });
+        arrayOfElements.items.forEach((val) => sum += val.amount);
         return sum;
+    }
+    function expenses(model) {
+        let inDate = new Date(model.dateIn);
+        let outDate = new Date(model.dateOut);
+        let income = model.ViewModel[0];
+        let expenses = model.ViewModel[1];
+        let extra = model.ViewModel[2];
+        let savings = model.ViewModel[3];
+
+
+
+        model.monthlyIncome = totalSum(income);
+        model.monthlyExpenses = totalSum(expenses) + totalSum(extra) + totalSum(savings);
+        model.balance = model.monthlyIncome - model.monthlyExpenses;
+        model.perDay = model.balance / diffDays(inDate, outDate);
+        model.percentage = (model.balance * 100) / model.monthlyIncome;
+        model.resultsChart = [
+            [model.monthlyIncome, model.monthlyExpenses, model.balance, model.perDay]
+        ];
+        model.resultsPercentageChart = [
+            [model.percentage, 100]
+        ];
     }
 }
 

@@ -4,8 +4,8 @@
         <uib-tab-heading>{{tab.title}}-{{$index + 1}}
             <span class="glyphicon glyphicon-remove" ng-click="vmController.removeTab($event, $index)"></span>
         </uib-tab-heading>
-        <budget-app title="">
+        <budget-app>
         </budget-app>
     </uib-tab>
-    <span class="glyphicon glyphicon-plus" ng-click="vmController.addNewTab()"></span>
+    <span  style="padding:11px;" class="glyphicon glyphicon-plus" ng-click="vmController.addNewTab()"></span>
 </uib-tabset>

@@ -1,63 +1,60 @@
-var ang = require("angular");
-let template = require('raw-loader!./tabs.template.html');
-ang.module('tabsModule', ['Bootstrap', 'ui.bootstrap']).
-        directive('tabElement', tabElement).
-        controller('tabController', tabController);
+let ang = require("angular");
+const template = require('raw-loader!./tabs.template.html');
 
-function tabElement() {
-    return{
-        template: template,
-        controller: "tabController",
-        controllerAs: "vmController",
-        bindToController: true,
-        restrict: 'E',
-        scope: true,
-        link: linkFunction()
-    };
+class TabElement {
+
+    constructor()
+    {
+        this.template = template;
+        this.controller = "tabController";
+        this.controllerAs = "vmController";
+        this.bindToController = true;
+        this.restrict = 'E';
+        this.scope = true;
+//        not working
+        this.link = () => {
+            return{
+                pre: (scope, elem, attr, ctrl)=>console.log(scope),
+                post: (scope, elem, attr, ctrl)=>console.log(scope)
+            };
+        };
+    }
 }
 
-function linkFunction() {
-    return{
-        pre: preLink,
-        post: postLink
-    };
-}
-
-/**
- * prelinking function
- */
-function preLink(scope, elem, attr, ctrl) {
-}
-
-/**
- * postlinking function
- */
-function postLink(scope, elem, attr, ctrl) {
-}
 
 /**
  * Controller function
  */
+//constants
+const DEFAULT_TITLE = {title: 'Tab', active: 'true'};
+//class definition
+class TabController {
 
-function tabController() {
-    let vm = this;
-    vm.tabs = [{title: 'Tab'}];
-
-    vm.addNewTab = addNewTab;
-    vm.removeTab = removeTab;
-
-    function addNewTab() {
-        vm.tabs.splice(vm.tabs.length, 0, {title: 'Tab'});
+    //constructor definition
+    //services injected here like constructor params
+    constructor() {
+        this.tabs = [DEFAULT_TITLE];
     }
 
-    function removeTab(event, index) {
+    //default parameters
+    addNewTab(title = {title: 'Tab', active: 'true'}) {
+        //arrow for each
+        this.tabs.forEach(x => x.active = false);
+        this.tabs.splice(this.tabs.length, 0, title);
+    }
+
+    removeTab(event, index) {
         event.preventDefault();
         event.stopPropagation();
-        if (vm.tabs.length === 1) {
+        if (this.tabs.length === 1) {
             return;
         } else {
-            vm.tabs.splice(index, 1);
+            this.tabs.splice(index, 1);
         }
     }
 
 }
+
+ang.module('tabsModule', ['Bootstrap', 'ui.bootstrap']).
+        directive('tabElement', () => new TabElement).
+        controller('tabController', () => new TabController);
