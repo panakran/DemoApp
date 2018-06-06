@@ -22,4 +22,3 @@ require("./js/directives/table/table.services.js");
 require("./js/directives/datepicker/datepicker.directive.js");
 require("./js/directives/datepicker/datepicker.services.js");
 require("./js/directives/results-table/results-table.directive.js");
-require("./js/directives/tabs/tabs.directive.js");
